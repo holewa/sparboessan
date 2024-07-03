@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pengastigen/constans/app_colors.dart';
 import 'package:pengastigen/constans/get_color_by_level.dart';
+import 'package:pengastigen/services/date_service.dart';
 import 'package:pengastigen/widgets/level_indicator.dart';
 import 'package:pengastigen/widgets/develop/widget_wrapper.dart';
 
@@ -50,42 +50,40 @@ class MoneyTrackerContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final moneyText = '$currentMoney kr';
 
-    return 
-
-      Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-          WidgetWrapper(
-      child: AvatarGlow(
-        startDelay: const Duration(milliseconds: 1000),
-        glowColor: GetColorByLevel.getColorByLevel(level),
-        glowShape: BoxShape.circle,
-        curve: Curves.fastOutSlowIn,
-        child: Material(
-          elevation: 8.0,
-          shape: const CircleBorder(),
-          color: Colors.transparent,
-          child: Text(
-            moneyText,
-            style: Theme.of(context).textTheme.headlineMedium,
+        WidgetWrapper(
+          child: AvatarGlow(
+            startDelay: const Duration(milliseconds: 1000),
+            glowColor: GetColorByLevel.getColorByLevel(level),
+            glowShape: BoxShape.circle,
+            curve: Curves.fastOutSlowIn,
+            child: Material(
+              elevation: 8.0,
+              shape: const CircleBorder(),
+              color: Colors.transparent,
+              child: Text(
+                moneyText,
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
           ),
         ),
-      ),
+        WidgetWrapper(
+            child: Visibility(
+          visible: currentMoney != 0,
+          child: ElevatedButton(
+            onPressed: onUseYourMoney,
+            child: const Text('Använd dina pengar!'),
           ),
-
-          WidgetWrapper(
-         child: Visibility(
-           visible: currentMoney != 0,
-           child: ElevatedButton(
-             onPressed: onUseYourMoney,
-             child: const Text('Använd dina pengar!'),
-           ),
-         )),
+        )),
         const SizedBox(height: 20),
-          WidgetWrapper(
-        child: Container(
+        WidgetWrapper(
+            child: Container(
           width: 100,
-          decoration: BoxDecoration(color: Colors.red.withOpacity(0.8), border: Border.all()),
+          decoration: BoxDecoration(
+              color: Colors.red.withOpacity(0.8), border: Border.all()),
           child: Text(dayOfTheWeek,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
@@ -100,11 +98,10 @@ class MoneyTrackerContent extends StatelessWidget {
   }
 }
 
-
-String getDayOfTheWeek(DateTime dateTime) {
-  final DateFormat dateFormat = DateFormat('EEEE', 'sv_SE');
-  return dateFormat.format(dateTime);
-}
+// String getDayOfTheWeek(DateTime dateTime) {
+//   final DateFormat dateFormat = DateFormat('EEEE', 'sv_SE');
+//   return dateFormat.format(dateTime);
+// }
 
 String dayToUpperString(String day) {
   return day.substring(0, 1).toUpperCase() + day.substring(1);
@@ -121,7 +118,7 @@ class _MoneyTrackerState extends State<MoneyTracker> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.now();
+    DateTime dateNow = DateTime.now();
 
     return Scaffold(
       appBar: AppBar(
@@ -144,13 +141,13 @@ class _MoneyTrackerState extends State<MoneyTracker> {
                 child: Center(
                   child: MoneyTrackerContent(
                     currentMoney: _currentMoney,
-                    dayOfTheWeek: getDayOfTheWeek(dateTime),
+                    dayOfTheWeek: DateService.getDayOfTheWeek(dateNow),
                     onUseYourMoney: _useYourMoney,
                     level: _level,
                   ),
                 ),
               ),
-               LevelIndicator(maxLevel: _maxLevel, level: _level),
+              LevelIndicator(maxLevel: _maxLevel, level: _level),
             ],
           ),
         ],
