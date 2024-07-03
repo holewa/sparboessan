@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:pengastigen/constans/app_colors.dart';
 import 'package:pengastigen/constans/get_color_by_level.dart';
 import 'package:pengastigen/services/date_service.dart';
+import 'package:pengastigen/services/money_service.dart';
 import 'package:pengastigen/widgets/level_indicator.dart';
 import 'package:pengastigen/widgets/develop/widget_wrapper.dart';
 
@@ -19,8 +20,34 @@ class SavingApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MoneyTracker(),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Sparbössan'),
+          backgroundColor: AppColors.backgroundColorTheme,
+        ),
+        body: Container(
+          // margin: const EdgeInsets.all(20),
+          // padding: const EdgeInsets.all(20),
+          child: const MoneyTracker(),
+        ),
+
+        // WidgetWrapper(
+        //     child: Container(
+        //   width: 100,
+        //   decoration: BoxDecoration(
+        //       color: Colors.red.withOpacity(0.8), border: Border.all()),
+        //   child: Text(dayOfTheWeek,
+        //       textAlign: TextAlign.center,
+        //       overflow: TextOverflow.ellipsis,
+        //       style: const TextStyle(
+        //         fontSize: 24,
+        //         fontWeight: FontWeight.bold,
+        //         color: AppColors.backgroundColorTheme, //TODO dynamicly color
+        //       )),
+        // )),
+      ),
     );
   }
 }
@@ -34,13 +61,12 @@ class MoneyTracker extends StatefulWidget {
 
 class MoneyTrackerContent extends StatelessWidget {
   final int currentMoney;
-  final String dayOfTheWeek;
   final VoidCallback onUseYourMoney;
   final int level;
 
-  const MoneyTrackerContent({
+
+   const MoneyTrackerContent({
     required this.currentMoney,
-    required this.dayOfTheWeek,
     required this.onUseYourMoney,
     required this.level,
     super.key,
@@ -79,29 +105,13 @@ class MoneyTrackerContent extends StatelessWidget {
             child: const Text('Använd dina pengar!'),
           ),
         )),
-        WidgetWrapper(
-            child: Container(
-          width: 100,
-          decoration: BoxDecoration(
-              color: Colors.red.withOpacity(0.8), border: Border.all()),
-          child: Text(dayOfTheWeek,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.backgroundColorTheme, //TODO dynamicly color
-              )),
-        )),
       ],
     );
   }
 }
 
 class _MoneyTrackerState extends State<MoneyTracker> {
-  int _currentMoney = 0;
-  int _level = 1;
-  final int _maxLevel = 3;
+ final MoneyService _moneyService = MoneyService();
 
   late DateTime now;
   late Timer timeTimer;
@@ -109,14 +119,7 @@ class _MoneyTrackerState extends State<MoneyTracker> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateNow = DateTime.now();
-
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Sparbössan'),
-        backgroundColor: AppColors.backgroundColorTheme,
-      ),
       body: Stack(
         children: [
           // Background image
@@ -131,14 +134,12 @@ class _MoneyTrackerState extends State<MoneyTracker> {
               Expanded(
                 child: Center(
                   child: MoneyTrackerContent(
-                    currentMoney: _currentMoney,
-                    dayOfTheWeek: DateService.getDayOfTheWeek(dateNow),
+                    currentMoney: _moneyService.currentMoney,
                     onUseYourMoney: _useYourMoney,
-                    level: _level,
+                    level: _moneyService.currentLevel,
                   ),
                 ),
               ),
-              LevelIndicator(maxLevel: _maxLevel, level: _level),
             ],
           ),
         ],
@@ -156,7 +157,6 @@ class _MoneyTrackerState extends State<MoneyTracker> {
   @override
   void initState() {
     super.initState();
-    now = DateTime.now();
     timeTimer =
         Timer.periodic(const Duration(seconds: 1), (Timer t) => _updateTime());
     pointsTimer = Timer.periodic(
@@ -165,12 +165,10 @@ class _MoneyTrackerState extends State<MoneyTracker> {
 
   void _incrementMoneyLevel() {
     setState(() {
-      _currentMoney += _level * 10;
-      if (_level != _maxLevel) {
-        _level++;
-      }
-    });
+       _moneyService.incrementMoneyLevel();   
+        });
   }
+  
 
   void _updateTime() {
     setState(() {
@@ -180,8 +178,7 @@ class _MoneyTrackerState extends State<MoneyTracker> {
 
   void _useYourMoney() {
     setState(() {
-      _level = 1;
-      _currentMoney = 0;
+      _moneyService.useYourMoney();
     });
   }
 }
