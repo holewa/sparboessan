@@ -53,6 +53,7 @@ class MoneyTrackerContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
+        const SizedBox(height: 120),
         WidgetWrapper(
           child: AvatarGlow(
             startDelay: const Duration(milliseconds: 1000),
@@ -78,7 +79,6 @@ class MoneyTrackerContent extends StatelessWidget {
             child: const Text('Använd dina pengar!'),
           ),
         )),
-        const SizedBox(height: 20),
         WidgetWrapper(
             child: Container(
           width: 100,
@@ -90,21 +90,12 @@ class MoneyTrackerContent extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black, //TODO dynamicly color
+                color: AppColors.backgroundColorTheme, //TODO dynamicly color
               )),
         )),
       ],
     );
   }
-}
-
-// String getDayOfTheWeek(DateTime dateTime) {
-//   final DateFormat dateFormat = DateFormat('EEEE', 'sv_SE');
-//   return dateFormat.format(dateTime);
-// }
-
-String dayToUpperString(String day) {
-  return day.substring(0, 1).toUpperCase() + day.substring(1);
 }
 
 class _MoneyTrackerState extends State<MoneyTracker> {
@@ -169,10 +160,10 @@ class _MoneyTrackerState extends State<MoneyTracker> {
     timeTimer =
         Timer.periodic(const Duration(seconds: 1), (Timer t) => _updateTime());
     pointsTimer = Timer.periodic(
-        const Duration(seconds: 10), (Timer t) => _incrementLevel());
+        const Duration(seconds: 10), (Timer t) => _incrementMoneyLevel());
   }
 
-  void _incrementLevel() {
+  void _incrementMoneyLevel() {
     setState(() {
       _currentMoney += _level * 10;
       if (_level != _maxLevel) {

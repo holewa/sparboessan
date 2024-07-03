@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class DateService {
-  static String getDayOfTheWeek(DateTime dateTime) {
+   String getDayOfTheWeek(DateTime dateTime) {
     final DateFormat dateFormat = DateFormat('EEEE', 'sv_SE');
     return dayToUpperString(dateFormat.format(dateTime));
   }
