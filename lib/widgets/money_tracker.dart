@@ -20,7 +20,7 @@ class _MoneyTrackerState extends State<MoneyTracker> {
     return Column(
         children: [
           Text(
-            'Money:  $currentMoney',
+            'Money: $currentMoney',
             style: const TextStyle(
               fontSize: 40.0,
               fontWeight: FontWeight.bold,
@@ -32,18 +32,4 @@ class _MoneyTrackerState extends State<MoneyTracker> {
         ],
     );
   }
-  // return Scaffold(
-  //   body: Stack(
-  //     children: [
-  //       // Background image
-  //       Positioned.fill(
-  //         child: Image.asset(
-  //           'assets/images/pig.png',
-  //           fit: BoxFit.cover,
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  // );
-
 }

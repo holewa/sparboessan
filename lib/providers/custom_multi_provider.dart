@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengastigen/providers/date_provider.dart';
 import 'package:pengastigen/providers/money_provider.dart';
+import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomMultiProvider extends StatelessWidget {
@@ -18,6 +19,9 @@ class CustomMultiProvider extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => DateProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
         ),
       ],
       child: child,
