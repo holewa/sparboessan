@@ -19,11 +19,37 @@ class MyApp extends StatelessWidget {
         debugShowMaterialGrid: false,
         showSemanticsDebugger: false,
         theme: ThemeData(
-          primarySwatch: Colors.teal,
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.purple,
+            brightness: Brightness.dark,
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.purple,
+          ),
+          textTheme: const TextTheme(
+            displayLarge: TextStyle(
+              fontSize: 72,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
+            ),
+            titleLarge: TextStyle(
+              fontSize: 30,
+              fontStyle: FontStyle.italic,
+              fontFamily: 'Roboto',
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 14,
+              fontFamily: 'Roboto',
+            ),
+            displaySmall: TextStyle(
+              fontSize: 24,
+              fontFamily: 'Roboto',
+            ),
+          ),
         ),
         home: const HomePage(),
       ),
     );
   }
 }
-

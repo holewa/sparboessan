@@ -16,7 +16,7 @@ class LevelIndicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Levels',
+            'Level',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

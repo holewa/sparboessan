@@ -17,16 +17,10 @@ class HomePage extends StatelessWidget {
           children: [
             Text(
               'Sparbössan',
-              style: TextStyle(
-                color: Colors.white70,
-                fontFamily: 'IndieFamily',
-                letterSpacing: 2.0,
-              ),
             ),
             Icon(Icons.money),
           ],
         ),
-        backgroundColor: Colors.blue,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -42,6 +36,20 @@ class HomePage extends StatelessWidget {
               fontFamily: 'IndieFlower',
             ),
           ),
+          FloatingActionButton.extended(
+            onPressed: () {
+              context.read<MoneyProvider>().useYourMoney();
+            },
+            label: const Text('Använd dina pengar!'),
+            icon: const Icon(Icons.remove),
+          ),
+          const Divider(
+            color: Colors.grey,
+            height: 20,
+            thickness: 2,
+            indent: 10,
+            endIndent: 10,
+          ),
           Text(
             //watch class "lyssnar" på denna variabel.
             context.watch<DateProvider>().currentDay,
@@ -49,18 +57,29 @@ class HomePage extends StatelessWidget {
               fontSize: 40.0,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0,
-              color: Colors.grey,
+              color: Colors.blueGrey,
               fontFamily: 'IndieFlower',
             ),
           ),
+          Text(
+            //watch class "lyssnar" på denna variabel.
+            context.watch<DateProvider>().daysUntilSaturdayText,
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2.0,
+              color: Colors.blueGrey,
+              fontFamily: 'IndieFlower',
+            ),
+          ),
+          const Divider(
+            color: Colors.grey,
+            height: 20,
+            thickness: 2,
+            indent: 10,
+            endIndent: 10,
+          ),
           const LevelIndicator(),
-          FloatingActionButton.extended(
-            onPressed: () {
-              context.read<MoneyProvider>().useYourMoney();
-            },
-            label: const Text('Använd dina pengar!'),
-            icon: const Icon(Icons.remove),
-          )
           //fylla på pengar från inloggat läge annan sida
           //   FloatingActionButton(onPressed: () {
           //   context.read<MoneyProvider>().updateMoney(50);
