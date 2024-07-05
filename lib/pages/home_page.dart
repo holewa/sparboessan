@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
             Text(
               'Sparbössan',
             ),
-            Icon(Icons.money),
+            // Icon(Icons.money),
           ],
         ),
       ),
@@ -28,57 +28,22 @@ class HomePage extends StatelessWidget {
           Text(
             //watch class "lyssnar" på denna variabel.
             context.watch<MoneyProvider>().currentMoneyText,
-            style: const TextStyle(
-              fontSize: 40.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              color: Colors.grey,
-              fontFamily: 'IndieFlower',
-            ),
+            style: Theme.of(context).textTheme.displayLarge,
           ),
-          FloatingActionButton.extended(
-            onPressed: () {
-              context.read<MoneyProvider>().useYourMoney();
-            },
-            label: const Text('Använd dina pengar!'),
-            icon: const Icon(Icons.remove),
-          ),
-          const Divider(
-            color: Colors.grey,
-            height: 20,
-            thickness: 2,
-            indent: 10,
-            endIndent: 10,
-          ),
+          const DialogExample(),
+          const Divider(),
           Text(
             //watch class "lyssnar" på denna variabel.
             context.watch<DateProvider>().currentDay,
-            style: const TextStyle(
-              fontSize: 40.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              color: Colors.blueGrey,
-              fontFamily: 'IndieFlower',
-            ),
           ),
           Text(
             //watch class "lyssnar" på denna variabel.
             context.watch<DateProvider>().daysUntilSaturdayText,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              color: Colors.blueGrey,
-              fontFamily: 'IndieFlower',
-            ),
           ),
-          const Divider(
-            color: Colors.grey,
-            height: 20,
-            thickness: 2,
-            indent: 10,
-            endIndent: 10,
+          const SizedBox(
+            height: 60,
           ),
+          const Divider(),
           const LevelIndicator(),
           //fylla på pengar från inloggat läge annan sida
           //   FloatingActionButton(onPressed: () {
@@ -86,6 +51,52 @@ class HomePage extends StatelessWidget {
           // })
         ],
       ),
+    );
+  }
+}
+
+class DialogExample extends StatelessWidget {
+  const DialogExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        // Show dialog and wait for a result
+        String? result = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+            'Använda pengar..',
+          ),
+            content:
+             Text(
+            'Är du säker på att du vill använda dina pengar?',
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'Nej');
+                },
+                child: const Text('Nej'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'Ja');
+                },
+                child: const Text('Ja'),
+              ),
+            ],
+          ),
+        );
+
+        if (result == 'Ja') {
+        //TODO kolla på nedanstående fel
+          context.read<MoneyProvider>().useYourMoney();
+        }
+      },
+      child: const Text('Använd dina pengar!'),
     );
   }
 }

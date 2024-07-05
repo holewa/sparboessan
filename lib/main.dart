@@ -27,6 +27,13 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.purple,
           ),
+          dividerTheme: const DividerThemeData(
+            thickness: 3,
+            color: Colors.grey,
+            space: 16, // Space between dividers in a list
+            indent: 10,
+            endIndent: 10,
+          ),
           textTheme: const TextTheme(
             displayLarge: TextStyle(
               fontSize: 72,
@@ -39,11 +46,11 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Roboto',
             ),
             bodyMedium: TextStyle(
-              fontSize: 14,
+              fontSize: 24,
               fontFamily: 'Roboto',
             ),
             displaySmall: TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontFamily: 'Roboto',
             ),
           ),

@@ -26,10 +26,10 @@ class LevelIndicator extends StatelessWidget {
             children: List.generate(maxLevel, (index) {
               bool isCurrentLevel =
                   index + 1 == context.watch<MoneyProvider>().currentLevel;
-
               return Row(
                 children: [
                   IconButton(
+                    tooltip: 'Nivå ${index + 1} - Denna nivå ger dig ${(index + 1) * 10} varje vecka!',
                     icon: const FaIcon(FontAwesomeIcons.star),
                     color: GetColorByLevel.getColorByLevel(index + 1),
                     iconSize: isCurrentLevel ? 40 : 20,
