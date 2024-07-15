@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pengastigen/pages/home_page.dart';
+import 'package:pengastigen/pages/logged-in/home_page_li.dart';
 import 'package:pengastigen/providers/custom_multi_provider.dart';
 
 void main() {
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const HomePage(),
+        home: const HomePageLoggedIn(),
       ),
     );
   }

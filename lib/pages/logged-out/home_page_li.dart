@@ -7,8 +7,8 @@ import 'package:pengastigen/widgets/log_in_dialog.dart';
 import 'package:pengastigen/widgets/use_money_dialog.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePageLoggedOut extends StatelessWidget {
+  const HomePageLoggedOut({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,24 +17,18 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        title:  Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Sparbössan',
             ),
-            // Icon(Icons.money),
-          ],
-        ),
-      ),
-      body: isLoggedIn ? Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
           Align(
             alignment: Alignment.topLeft,
             child: Row(
               children: [
-                const Icon(Icons.verified_user),
+                  isLoggedIn ?
+                const Icon(Icons.verified_user) : const Icon(Icons.login_rounded),
                 Text(
                   'Ruben',
                   style: Theme.of(context).textTheme.displaySmall,
@@ -42,6 +36,14 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
+            // Icon(Icons.money),
+          ],
+
+        ),
+      ),
+      body: isLoggedIn ? Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
           Text(
             context.watch<MoneyProvider>().currentMoneyText,
             style: Theme.of(context).textTheme.displayLarge,
