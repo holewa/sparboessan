@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
-  String _currentUser = 'user has not been registered';
+  String _currentUser = 'Ruben';
   bool _isLoggedIn = false;
 
-  String get name => _currentUser;
+  String get currentUser => _currentUser;
   bool get isLoggedIn => _isLoggedIn;
 
   void setName(String newName) {

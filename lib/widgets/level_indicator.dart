@@ -29,7 +29,7 @@ class LevelIndicator extends StatelessWidget {
               return Row(
                 children: [
                   IconButton(
-                    tooltip: 'Nivå ${index + 1} - Denna nivå ger dig ${(index + 1) * 10} varje vecka!',
+                    tooltip: 'Nivå ${index + 1} - Denna nivå ger dig ${(index + 1) * 10} kr varje vecka!',
                     icon: const FaIcon(FontAwesomeIcons.star),
                     color: GetColorByLevel.getColorByLevel(index + 1),
                     iconSize: isCurrentLevel ? 40 : 20,

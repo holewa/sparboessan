@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengastigen/providers/date_provider.dart';
 import 'package:pengastigen/providers/money_provider.dart';
-import 'package:pengastigen/providers/user_provider.dart';
 import 'package:pengastigen/widgets/level_indicator.dart';
-import 'package:pengastigen/widgets/log_in_dialog.dart';
 import 'package:pengastigen/widgets/use_money_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -13,31 +11,6 @@ class HomePageLoggedIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title:  Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Sparbössan',
-            ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Row(
-              children: [
-                const Icon(Icons.verified_user),
-                Text(
-                  'Usernejm',
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-              ],
-            ),
-          ),
-            // Icon(Icons.money),
-          ],
-
-        ),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

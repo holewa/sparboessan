@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:pengastigen/pages/home_page.dart';
-import 'package:pengastigen/pages/logged-in/home_page_li.dart';
 import 'package:pengastigen/providers/custom_multi_provider.dart';
+import 'package:pengastigen/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:pengastigen/pages/homepage.dart';
 
 void main() {
   initializeDateFormatting();
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return CustomMultiProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const HomePageLoggedIn(),
+        home:const HomePage(),
       ),
     );
   }

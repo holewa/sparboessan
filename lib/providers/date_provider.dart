@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class DateProvider extends ChangeNotifier {
   DateTime _currentTime = DateTime.now();
-  int _currentDay = DateTime.now().day;
 
   Timer? _timer;
 
