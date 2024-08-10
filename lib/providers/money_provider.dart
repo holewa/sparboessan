@@ -4,7 +4,7 @@ class MoneyProvider extends ChangeNotifier {
   int _currentMoney = 0;
   int _currentLevel = 1;
   final int _maxLevel = 3;
-  late int _moneyToGetThisWeek;
+  int _moneyToGetThisWeek = 10;
 
   int get currentMoney => _currentMoney;
   String get currentMoneyText => '$_currentMoney kr';
