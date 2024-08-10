@@ -1,25 +1,58 @@
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pengastigen/providers/money_provider.dart';
 
 class DateProvider extends ChangeNotifier {
   DateTime _currentTime = DateTime.now();
+  int day = 1;
+  late DateTime _currentTimeFake = DateTime.utc(2024, 7, day);
+  final MoneyProvider moneyProvider;
 
   Timer? _timer;
 
-  DateProvider() {
-    _startTimer();
+  DateProvider(this.moneyProvider) {
+    _startTimerFake();
   }
 
-  String get currentDay => getDayOfTheWeek(_currentTime);
+  String get currentDay => getDayOfTheWeek(_currentTimeFake);
 
   String get daysUntilSaturdayText =>
-      _daysUntilSaturdayText(_daysUntilSaturday());
+      _daysUntilSaturdayText(_daysUntilSaturdayFake());
+
+  //todo använd denna istället
+  int get daysUntilSaturday => _daysUntilSaturday();
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       updateTime();
     });
+  }
+
+  //2 fake methods for easier day handling
+  void _startTimerFake() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      updateTimeFakeDays();
+    });
+  }
+
+  void updateTimeFakeDays() {
+    print(getDayOfTheWeek(_currentTimeFake));
+    if (getDayOfTheWeek(_currentTimeFake) == "Lördag") {
+      moneyProvider.incrementMoney();
+    }
+    if (day == 8) {
+      day = 1;
+    }
+    day++;
+    _currentTimeFake = DateTime.utc(2024, 7, day);
+    notifyListeners();
+  }
+
+  int _daysUntilSaturdayFake() {
+    int saturday = DateTime.saturday;
+    int daysUntilSaturday = saturday - day;
+    return daysUntilSaturday;
   }
 
   void updateTime() {
@@ -31,6 +64,25 @@ class DateProvider extends ChangeNotifier {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  String _daysUntilSaturdayText(daysUntilSaturday) {
+    print(daysUntilSaturday);
+    if (daysUntilSaturday == 1) {
+      return '$daysUntilSaturday dag kvar till veckopeng!';
+    }
+    if (daysUntilSaturday > 0) {
+      return '$daysUntilSaturday dagar kvar till veckopeng!';
+    }
+    //händer på söndag och måndag
+    if (daysUntilSaturday < 0) {
+      int totalDays = daysUntilSaturday + 7;
+      return '$totalDays dagar kvar till veckopeng!';
+    }
+
+    //händer bara på lördagar
+    int moneyGottenThisWeek = moneyProvider.moneyGottenThisWeek;
+    return 'Idag har du fått $moneyGottenThisWeek kr i veckopeng!';
   }
 }
 
@@ -47,19 +99,4 @@ int _daysUntilSaturday() {
   int saturday = DateTime.saturday;
   int daysUntilSaturday = saturday - DateTime.now().day;
   return daysUntilSaturday;
-}
-
-String _daysUntilSaturdayText(daysUntilSaturday) {
-  if (daysUntilSaturday == 1) {
-    return '$daysUntilSaturday dag kvar till veckopeng!';
-  }
-  if (daysUntilSaturday > 0) {
-    return '$daysUntilSaturday dagar kvar till veckopeng!';
-  }
-  //borde bara hända på söndagar!
-  if (daysUntilSaturday < 0) {
-    return '6 dagar kvar till veckopeng!';
-  }
-  //borde bara hända på lördagar!
-  return 'Idag har du fått x veckopeng!';
 }

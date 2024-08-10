@@ -7,7 +7,12 @@ class LogInDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    bool isLoggedIn = context.watch<UserProvider>().isLoggedIn;
+
+    return ElevatedButton.icon(
+      label: isLoggedIn ? const Text('LoggedInUser') : const Text('Logga in') ,
+      icon: isLoggedIn ? const Icon(Icons.verified_user_outlined) : const Icon(Icons.lock_person),
+      iconAlignment: IconAlignment.end,
       onPressed: () async {
         // Show dialog and wait for a result
         String? result = await showDialog<String>(
@@ -39,9 +44,12 @@ class LogInDialog extends StatelessWidget {
 
         if (result == 'Ja') {
           context.read<UserProvider>().setIsLoggedIn();
-        } 
+        }
+
+        if (result == 'Nej') {
+          context.read<UserProvider>().setIsLoggedOut();
+        }
       },
-      child: const Text('du verkar inte vara inloggad'),
     );
   }
 }

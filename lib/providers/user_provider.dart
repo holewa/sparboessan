@@ -16,4 +16,9 @@ class UserProvider extends ChangeNotifier {
     _isLoggedIn = true;
     notifyListeners();
   }
+
+  void setIsLoggedOut() {
+    _isLoggedIn = false;
+    notifyListeners();
+  }
 }

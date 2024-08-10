@@ -1,30 +1,20 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class MoneyProvider extends ChangeNotifier {
   int _currentMoney = 0;
   int _currentLevel = 1;
   final int _maxLevel = 3;
-  Timer? _timer;
-
-  MoneyProvider() {
-    _startTimer();
-  }
+  late int _moneyToGetThisWeek;
 
   int get currentMoney => _currentMoney;
   String get currentMoneyText => '$_currentMoney kr';
   int get currentLevel => _currentLevel;
   int get maxLevel => _maxLevel;
-
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      incrementMoney();
-    });
-  }
+  int get moneyGottenThisWeek => _moneyToGetThisWeek;
 
   void incrementMoney() {
-    _currentMoney += _currentLevel * 10;
+    _moneyToGetThisWeek = _currentLevel * 10;
+    _currentMoney += _moneyToGetThisWeek;
     if (_currentLevel != _maxLevel) {
       _currentLevel++;
     }
@@ -40,11 +30,5 @@ class MoneyProvider extends ChangeNotifier {
     _currentMoney = 0;
     _currentLevel = 1;
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 }
