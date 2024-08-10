@@ -5,9 +5,11 @@ import 'package:pengastigen/providers/money_provider.dart';
 
 class DateProvider extends ChangeNotifier {
   DateTime _currentTime = DateTime.now();
+  final MoneyProvider moneyProvider;
+
+  //kan raderas sen
   int day = 1;
   late DateTime _currentTimeFake = DateTime.utc(2024, 7, day);
-  final MoneyProvider moneyProvider;
 
   Timer? _timer;
 
@@ -21,7 +23,7 @@ class DateProvider extends ChangeNotifier {
       _daysUntilSaturdayText(_daysUntilSaturdayFake());
 
   //todo använd denna istället
-  int get daysUntilSaturday => _daysUntilSaturday();
+  int get daysUntilSaturday => _daysUntilSaturdayFake();
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -37,8 +39,7 @@ class DateProvider extends ChangeNotifier {
   }
 
   void updateTimeFakeDays() {
-    print(getDayOfTheWeek(_currentTimeFake));
-    if (getDayOfTheWeek(_currentTimeFake) == "Lördag") {
+    if (getDayOfTheWeek(_currentTimeFake) == "Fredag") {
       moneyProvider.incrementMoney();
     }
     if (day == 8) {
@@ -67,12 +68,11 @@ class DateProvider extends ChangeNotifier {
   }
 
   String _daysUntilSaturdayText(daysUntilSaturday) {
-    print(daysUntilSaturday);
     if (daysUntilSaturday == 1) {
-      return '$daysUntilSaturday dag kvar till veckopeng!';
+      return '$daysUntilSaturday dag kvar till veckopeng';
     }
     if (daysUntilSaturday > 0) {
-      return '$daysUntilSaturday dagar kvar till veckopeng!';
+      return '$daysUntilSaturday dagar kvar till veckopeng';
     }
     //händer på söndag och måndag
     if (daysUntilSaturday < 0) {

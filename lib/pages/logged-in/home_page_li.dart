@@ -14,6 +14,16 @@ class HomePageLoggedIn extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+        Padding(
+          padding:
+              const EdgeInsets.only(right: 417),
+          child: Text(
+            context.watch<DateProvider>().currentDay,
+            style: const TextStyle(
+              fontSize: 14,
+            ),
+          ),
+        ),
           const SizedBox(
             height: 60,
           ),
@@ -26,9 +36,6 @@ class HomePageLoggedIn extends StatelessWidget {
             height: 60,
           ),
           const Divider(),
-          Text(
-            context.watch<DateProvider>().currentDay,
-          ),
           Text(
             context.watch<DateProvider>().daysUntilSaturdayText,
           ),
