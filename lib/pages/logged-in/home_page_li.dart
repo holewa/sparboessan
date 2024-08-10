@@ -14,20 +14,23 @@ class HomePageLoggedIn extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          const SizedBox(
+            height: 60,
+          ),
           Text(
             context.watch<MoneyProvider>().currentMoneyText,
             style: Theme.of(context).textTheme.displayLarge,
           ),
           const UseMoneyDialog(),
+          const SizedBox(
+            height: 60,
+          ),
           const Divider(),
           Text(
             context.watch<DateProvider>().currentDay,
           ),
           Text(
             context.watch<DateProvider>().daysUntilSaturdayText,
-          ),
-          const SizedBox(
-            height: 60,
           ),
           const Divider(),
           const LevelIndicator(),

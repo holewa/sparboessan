@@ -10,7 +10,7 @@ class LogInDialog extends StatelessWidget {
     bool isLoggedIn = context.watch<UserProvider>().isLoggedIn;
 
     return ElevatedButton.icon(
-      label: isLoggedIn ? const Text('LoggedInUser') : const Text('Logga in') ,
+      label: isLoggedIn ? const Text('Ruben') : const Text('Logga in') ,
       icon: isLoggedIn ? const Icon(Icons.verified_user_outlined) : const Icon(Icons.lock_person),
       iconAlignment: IconAlignment.end,
       onPressed: () async {
