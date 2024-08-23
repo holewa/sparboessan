@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengastigen/providers/date_provider.dart';
-import 'package:pengastigen/providers/money_provider.dart';
+import 'package:pengastigen/providers/error_message_provider.dart';
+import 'package:pengastigen/providers/money_service.dart';
 import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,16 +14,24 @@ class CustomMultiProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => MoneyProvider(),
+        // Provide the MoneyService instance.
+        Provider<MoneyService>(
+          create: (_) => MoneyService(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => DateProvider(
-            Provider.of<MoneyProvider>(context, listen: false),
+        // Provide the UserProvider instance, passing the MoneyService.
+        ChangeNotifierProvider<UserProvider>(
+          create: (context) => UserProvider(
+            Provider.of<MoneyService>(context, listen: false),
           ),
         ),
-        ChangeNotifierProvider(
-          create: (context) => UserProvider(), // Assuming you meant UserProvider
+        // Provide the DateProvider instance, passing the UserProvider.
+        ChangeNotifierProvider<DateProvider>(
+          create: (context) => DateProvider(
+            Provider.of<UserProvider>(context, listen: false),
+          ),
+        ),
+        ChangeNotifierProvider<ErrorMessageProvider>(
+          create: (context) => ErrorMessageProvider(),
         ),
       ],
       child: child,

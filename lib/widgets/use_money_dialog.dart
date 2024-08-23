@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pengastigen/providers/money_provider.dart';
+import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class UseMoneyDialog extends StatelessWidget {
@@ -39,10 +39,11 @@ class UseMoneyDialog extends StatelessWidget {
 
         if (result == 'Ja') {
           //TODO kolla på nedanstående fel
-          context.read<MoneyProvider>().useYourMoney();
+          context.read<UserProvider>().useMoney();
         }
       },
       child: const Text('Använd dina pengar!'),
     );
   }
 }
+

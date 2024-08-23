@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pengastigen/constans/get_color_by_level.dart';
-import 'package:pengastigen/providers/date_provider.dart';
-import 'package:pengastigen/providers/money_provider.dart';
+import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class LevelIndicator extends StatelessWidget {
@@ -28,7 +27,7 @@ class LevelIndicator extends StatelessWidget {
               Row(
                 children: List.generate(maxLevel, (index) {
                   bool isCurrentLevel =
-                      index + 1 == context.watch<MoneyProvider>().currentLevel;
+                      index + 1 == context.watch<UserProvider>().currentUser?.currentLevel;
                   return Row(
                     children: [
                       IconButton(

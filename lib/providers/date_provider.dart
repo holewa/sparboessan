@@ -1,11 +1,11 @@
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pengastigen/providers/money_provider.dart';
+import 'package:pengastigen/providers/user_provider.dart';
 
 class DateProvider extends ChangeNotifier {
   DateTime _currentTime = DateTime.now();
-  final MoneyProvider moneyProvider;
+  final UserProvider userProvider;
 
   //kan raderas sen
   int day = 1;
@@ -13,7 +13,7 @@ class DateProvider extends ChangeNotifier {
 
   Timer? _timer;
 
-  DateProvider(this.moneyProvider) {
+  DateProvider(this.userProvider) {
     _startTimerFake();
   }
 
@@ -21,9 +21,6 @@ class DateProvider extends ChangeNotifier {
 
   String get daysUntilSaturdayText =>
       _daysUntilSaturdayText(_daysUntilSaturdayFake());
-
-  //todo använd denna istället
-  int get daysUntilSaturday => _daysUntilSaturdayFake();
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -33,15 +30,15 @@ class DateProvider extends ChangeNotifier {
 
   //2 fake methods for easier day handling
   void _startTimerFake() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       updateTimeFakeDays();
     });
   }
 
   void updateTimeFakeDays() {
     if (getDayOfTheWeek(_currentTimeFake) == "Fredag") {
-      moneyProvider.incrementMoney();
-    }
+        userProvider.incrementMoneyForAllUsers();
+      } 
     if (day == 8) {
       day = 1;
     }
@@ -81,8 +78,7 @@ class DateProvider extends ChangeNotifier {
     }
 
     //händer bara på lördagar
-    int moneyGottenThisWeek = moneyProvider.moneyGottenThisWeek;
-    return 'Idag har du fått $moneyGottenThisWeek kr i veckopeng!';
+    return 'Idag har du fått ${userProvider.currentUser?.moneyToGetThisWeek} kr i veckopeng!';
   }
 }
 
