@@ -4,8 +4,8 @@ class User {
   String username;
   int currentMoney;
   int currentLevel;
-  final int maxLevel;
   int moneyToGetThisWeek;
+  final int maxLevel;
 
   User({
     required this.username,

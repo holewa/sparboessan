@@ -16,17 +16,14 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: Row(
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: isLoggedIn ? const LogOutDialog() : const LogInDialog(),
-            ),
+            const Spacer(),
+            isLoggedIn ? const LogOutDialog() : const LogInDialog(),
           ],
         ),
       ),
-      drawer: const HamburgerMenu(),
+      drawer: isLoggedIn ? const HamburgerMenu() : null,
       body: isLoggedIn ? const HomePageLoggedIn() : const HomePageLoggedOut(),
     );
   }
