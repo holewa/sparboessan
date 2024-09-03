@@ -36,7 +36,7 @@ class _AddMoneyDialogState extends State<AddMoneyDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Update User Money'),
+      title: const Text('Add User Money'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

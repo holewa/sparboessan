@@ -39,7 +39,7 @@ class HomePageLoggedInSuperUser extends StatelessWidget {
               }
             }
           },
-          child: const Text('Update User Money'),
+          child: const Text('Add User Money'),
         ),
       ),
     );

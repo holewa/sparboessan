@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:pengastigen/constans/feature_toggles.dart';
 import 'package:pengastigen/providers/custom_multi_provider.dart';
 import 'package:pengastigen/pages/homepage.dart';
+import 'package:pengastigen/providers/feature_toggle_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   initializeDateFormatting();
@@ -14,50 +17,57 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomMultiProvider(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        debugShowMaterialGrid: false,
-        showSemanticsDebugger: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.purple,
-            brightness: Brightness.dark,
-          ),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.purple,
-          ),
-          dividerTheme: const DividerThemeData(
-            thickness: 3,
-            color: Colors.grey,
-            space: 16, // Space between dividers in a list
-            indent: 10,
-            endIndent: 10,
-          ),
-          textTheme: const TextTheme(
-            displayLarge: TextStyle(
-              fontSize: 72,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
+      child: Builder(
+        builder: (context) {
+          final featureToggle = context.watch<FeatureToggleProvider>();
+
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            debugShowMaterialGrid: false,
+            showSemanticsDebugger: false,
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.purple,
+                brightness: featureToggle.isFeatureToggled(FeatureToggles.darkMode)
+                    ? Brightness.dark
+                    : Brightness.light,
+              ),
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.purple,
+              ),
+              dividerTheme: const DividerThemeData(
+                thickness: 3,
+                color: Colors.grey,
+                space: 16,
+                indent: 10,
+                endIndent: 10,
+              ),
+              textTheme: const TextTheme(
+                displayLarge: TextStyle(
+                  fontSize: 72,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                ),
+                titleLarge: TextStyle(
+                  fontSize: 30,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'Roboto',
+                ),
+                bodyMedium: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Roboto',
+                ),
+                displaySmall: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Roboto',
+                ),
+              ),
             ),
-            titleLarge: TextStyle(
-              fontSize: 30,
-              fontStyle: FontStyle.italic,
-              fontFamily: 'Roboto',
-            ),
-            bodyMedium: TextStyle(
-              fontSize: 24,
-              fontFamily: 'Roboto',
-            ),
-            displaySmall: TextStyle(
-              fontSize: 18,
-              fontFamily: 'Roboto',
-            ),
-          ),
-        ),
-        home:const HomePage(),
+            home: const HomePage(),
+          );
+        },
       ),
     );
   }
 }
-
