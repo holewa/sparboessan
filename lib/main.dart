@@ -3,7 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:pengastigen/constans/feature_toggles.dart';
 import 'package:pengastigen/providers/custom_multi_provider.dart';
 import 'package:pengastigen/pages/homepage.dart';
-import 'package:pengastigen/providers/feature_toggle_provider.dart';
+import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return CustomMultiProvider(
       child: Builder(
         builder: (context) {
-          final featureToggle = context.watch<FeatureToggleProvider>();
+          final userProvider = context.watch<UserProvider>();
 
           return MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -29,10 +29,8 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Colors.purple,
-                brightness: featureToggle.isFeatureToggled(FeatureToggles.darkMode)
-                    ? Brightness.dark
-                    : Brightness.light,
-              ),
+                brightness:
+                    userProvider.isFeatureToggled(FeatureToggles.darkMode) ? Brightness.dark : Brightness.light,),
               appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.purple,
               ),

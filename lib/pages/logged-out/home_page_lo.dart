@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 class HomePageLoggedOut extends StatelessWidget {
   const HomePageLoggedOut({super.key});
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(

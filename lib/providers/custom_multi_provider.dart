@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengastigen/providers/date_provider.dart';
 import 'package:pengastigen/providers/error_message_provider.dart';
-import 'package:pengastigen/providers/feature_toggle_provider.dart';
+// import 'package:pengastigen/providers/feature_toggle_provider.dart';
 import 'package:pengastigen/providers/money_service.dart';
 import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,9 +34,9 @@ class CustomMultiProvider extends StatelessWidget {
         ChangeNotifierProvider<ErrorMessageProvider>(
           create: (context) => ErrorMessageProvider(),
         ),
-        ChangeNotifierProvider<FeatureToggleProvider>(
-          create: (context) => FeatureToggleProvider(),
-        ),
+        // ChangeNotifierProvider<FeatureToggleProvider>(
+        //   create: (context) => FeatureToggleProvider(),
+        // ),
       ],
       child: child,
     );

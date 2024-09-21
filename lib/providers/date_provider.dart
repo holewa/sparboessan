@@ -78,7 +78,7 @@ class DateProvider extends ChangeNotifier {
     }
 
     //händer bara på lördagar
-    return 'Idag har du fått ${userProvider.currentUser?.moneyToGetThisWeek} kr i veckopeng!';
+    return 'Idag har du fått ${userProvider.user?.moneyToGetThisWeek} kr i veckopeng!';
   }
 }
 

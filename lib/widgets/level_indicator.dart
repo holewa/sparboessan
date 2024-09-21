@@ -27,7 +27,7 @@ class LevelIndicator extends StatelessWidget {
               Row(
                 children: List.generate(maxLevel, (index) {
                   bool isCurrentLevel =
-                      index + 1 == context.watch<UserProvider>().currentUser?.currentLevel;
+                      index + 1 == context.watch<UserProvider>().user?.currentLevel;
                   return Row(
                     children: [
                       IconButton(

@@ -23,6 +23,7 @@ class LogOutDialog extends StatelessWidget {
               );
 
               if (shouldLogOut == true) {
+                // ignore: use_build_context_synchronously
                 context.read<UserProvider>().logOut();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Du har loggats ut.')),

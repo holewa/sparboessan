@@ -15,7 +15,7 @@ class LogInDialog extends StatelessWidget {
 
     return ElevatedButton.icon(
       label: isLoggedIn
-          ? Text(context.watch<UserProvider>().currentUser!.username)
+          ? Text(context.watch<UserProvider>().user!.username)
           : const Text('Logga in'),
       icon: isLoggedIn
           ? const Icon(Icons.verified_user_outlined)
@@ -30,17 +30,20 @@ class LogInDialog extends StatelessWidget {
         );
 
         if (username != null && username.isNotEmpty) {
-          bool success = await userProvider.logIn(username);
+          bool success =
+              await userProvider.logIn(username);
           if (success) {
-        // Display welcome message and clear errors
-        final userProvider = context.read<UserProvider>();
-        final username = userProvider.currentUser?.username ?? 'Användaren finns inte';
+            // Display welcome message and clear errors
+            final userProvider = context.read<UserProvider>();
+            final username =
+                userProvider.user?.username ?? 'Användaren finns inte';
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Välkommen $username')),
-        );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Välkommen $username!')),
+            );
 
-        context.read<ErrorMessageProvider>().clearErrorMessage();          } else {
+            context.read<ErrorMessageProvider>().clearErrorMessage();
+          } else {
             errorProvider.setErrorMessage('Användaren finns inte');
           }
         } else {
@@ -82,6 +85,7 @@ class __LogInDialogContentState extends State<_LogInDialogContent> {
   @override
   Widget build(BuildContext context) {
     final errorProvider = context.watch<ErrorMessageProvider>();
+    // final featureToggleProvider = context.watch<FeatureToggleProvider>();
 
     return AlertDialog(
       content: Column(
@@ -116,8 +120,9 @@ class __LogInDialogContentState extends State<_LogInDialogContent> {
           onPressed: _isButtonEnabled
               ? () async {
                   final username = _usernameController.text.trim();
-                  bool success =
-                      await context.read<UserProvider>().logIn(username);
+                  bool success = await context
+                      .read<UserProvider>()
+                      .logIn(username);
                   if (success) {
                     Navigator.pop(context,
                         username); // Only close the dialog if login is successful
@@ -132,5 +137,4 @@ class __LogInDialogContentState extends State<_LogInDialogContent> {
         ),
       ],
     );
-  }
-}
+  }}

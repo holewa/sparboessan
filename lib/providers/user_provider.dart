@@ -4,28 +4,81 @@ import 'package:pengastigen/providers/money_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
-  Map<String, User> _users = {};
-  User? _currentUser;
+  final Map<String, User> _users = {};
+  User? _user;
 
   final List<String> users = ['Ruben', 'Otto', 'Admin'];
 
   final List<String> _superUsers = ['Admin'];
 
-  User? get currentUser => _currentUser;
+  final MoneyService _moneyService;
 
-  String get username => _currentUser?.username ?? '';
+  User? get user => _user;
 
-  bool get isLoggedIn => _currentUser != null;
+  String get username => _user?.username ?? '';
 
-  int get currentUserMoney => _currentUser?.currentMoney ?? 0;
+  bool get isLoggedIn => _user != null;
+
+  int get currentMoney => _user?.currentMoney ?? 0;
 
   bool get isSuperUser =>
-      _currentUser != null && _superUsers.contains(_currentUser!.username);
+      _user != null && _superUsers.contains(_user!.username);
 
-  final MoneyService _moneyService;
+  Map<String, bool>? get featureToggles => user?.featureToggles;
 
   UserProvider(this._moneyService) {
     _loadUsers();
+  }
+
+  Future<void> _saveUser(User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(user.username, user.toJson());
+  }
+
+  Future<bool> logIn(String username) async {
+    if (users.contains(username)) {
+      // await loadFeatureToggles();
+      if (!_users.containsKey(username)) {
+        final user = User(username: username);
+        _users[username] = user;
+        await _saveUser(user);
+      }
+      _user = _users[username];
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> logOut() async {
+    _user = null;
+    notifyListeners();
+  }
+
+  Future<void> incrementMoneyForAllUsers() async {
+    _users.forEach((username, user) => (_moneyService.incrementMoney(user)));
+    notifyListeners();
+  }
+
+  Future<void> useMoney() async {
+    if (_user != null) {
+      _moneyService.useMoney(_user!);
+      await _saveUser(_user!);
+      notifyListeners();
+    }
+  }
+
+  void updateUserMoney(String username, int amount) {
+    if (isSuperUser) {
+      final user = _users[username];
+      if (user != null) {
+        user.addMoney(amount);
+        notifyListeners();
+      }
+    } else {
+      throw Exception('Unauthorized action');
+    }
   }
 
   Future<void> _loadUsers() async {
@@ -42,54 +95,15 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _saveUser(User user) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(user.username, user.toJson());
-  }
-
-  Future<bool> logIn(String username) async {
-    if (users.contains(username)) {
-      if (!_users.containsKey(username)) {
-        final user = User(username: username);
-        _users[username] = user;
-        await _saveUser(user);
-      }
-      _currentUser = _users[username];
-      notifyListeners();
-      return true;
-    } else {
-      return false;
+  bool isFeatureToggled(String featureKey) {
+    if (featureToggles != null && featureToggles!.containsKey(featureKey)) {
+      return featureToggles?[featureKey] ?? false;
     }
+    return false;
   }
 
-  Future<void> logOut() async {
-    _currentUser = null;
+  void setFeatureToggle(String featureKey) {
+    featureToggles![featureKey] = !(featureToggles![featureKey] ?? false);
     notifyListeners();
-  }
-
-  Future<void> incrementMoneyForAllUsers() async {
-    _users.forEach((username, user) => (_moneyService.incrementMoney(user)));
-    notifyListeners();
-  }
-
-  Future<void> useMoney() async {
-    if (_currentUser != null) {
-      _moneyService.useMoney(_currentUser!);
-      await _saveUser(_currentUser!);
-      notifyListeners();
-    }
-  }
-
-  void updateUserMoney(String username, int amount) {
-    if (isSuperUser) {
-      final user = _users[username];
-      if (user != null) {
-        user.addMoney(amount);
-        notifyListeners();
-        print('money added');
-      }
-    } else {
-      throw Exception('Unauthorized action');
-    }
   }
 }

@@ -6,6 +6,7 @@ class User {
   int currentLevel;
   int moneyToGetThisWeek;
   final int maxLevel;
+  Map<String, bool> featureToggles;
 
   User({
     required this.username,
@@ -13,6 +14,7 @@ class User {
     this.currentLevel = 1,
     this.maxLevel = 3,
     this.moneyToGetThisWeek = 10,
+    this.featureToggles = const {},
   });
 
   // Create a User instance from a Map (used in fromJson)
@@ -23,6 +25,7 @@ class User {
       currentLevel: data['currentLevel'],
       maxLevel: data['maxLevel'],
       moneyToGetThisWeek: data['moneyToGetThisWeek'],
+      featureToggles: Map<String, bool>.from(data['featureToggles'] ?? {}),
     );
   }
 
@@ -34,6 +37,7 @@ class User {
       'currentLevel': currentLevel,
       'maxLevel': maxLevel,
       'moneyToGetThisWeek': moneyToGetThisWeek,
+      'featureToggles': featureToggles,
     };
   }
 
@@ -42,7 +46,6 @@ class User {
 
   // For loading from SharedPreferences
   factory User.fromJson(String json) => User.fromMap(jsonDecode(json));
-
 
   void incrementMoney() {
     const int maxLevel = 3;
@@ -53,7 +56,7 @@ class User {
     }
   }
 
-  //används inte än 
+  //används inte än
   void addMoney(int newAmount) {
     currentMoney += newAmount;
   }
