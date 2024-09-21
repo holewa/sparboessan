@@ -1,56 +1,35 @@
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pengastigen/constans/feature_toggles.dart';
 import 'package:pengastigen/providers/user_provider.dart';
 
 class DateProvider extends ChangeNotifier {
   DateTime _currentTime = DateTime.now();
   final UserProvider userProvider;
 
-  //kan raderas sen
-  int day = 1;
-  late DateTime _currentTimeFake = DateTime.utc(2024, 7, day);
-
   Timer? _timer;
 
   DateProvider(this.userProvider) {
-    _startTimerFake();
+    bool isTestEnviroment =
+        userProvider.isFeatureToggled(FeatureToggles.testEnviroment);
+
+    isTestEnviroment ? _startTimerFake() : _startTimer();
   }
 
-  String get currentDay => getDayOfTheWeek(_currentTimeFake);
+  String get currentDay => userProvider.isFeatureToggled(FeatureToggles.testEnviroment) 
+      ? getDayOfTheWeek(_currentTimeFake)
+      : getDayOfTheWeek(_currentTime);
 
-  String get daysUntilSaturdayText =>
-      _daysUntilSaturdayText(_daysUntilSaturdayFake());
+  String get daysUntilSaturdayText => userProvider.isFeatureToggled(FeatureToggles.testEnviroment) 
+      ? _daysUntilSaturdayText(_daysUntilSaturdayFake())
+      : _daysUntilSaturdayText(_daysUntilSaturday());
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    dispose();
+    _timer = Timer.periodic(const Duration(hours: 23), (timer) {
       updateTime();
     });
-  }
-
-  //2 fake methods for easier day handling
-  void _startTimerFake() {
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      updateTimeFakeDays();
-    });
-  }
-
-  void updateTimeFakeDays() {
-    if (getDayOfTheWeek(_currentTimeFake) == "Fredag") {
-        userProvider.incrementMoneyForAllUsers();
-      } 
-    if (day == 8) {
-      day = 1;
-    }
-    day++;
-    _currentTimeFake = DateTime.utc(2024, 7, day);
-    notifyListeners();
-  }
-
-  int _daysUntilSaturdayFake() {
-    int saturday = DateTime.saturday;
-    int daysUntilSaturday = saturday - day;
-    return daysUntilSaturday;
   }
 
   void updateTime() {
@@ -80,6 +59,38 @@ class DateProvider extends ChangeNotifier {
     //händer bara på lördagar
     return 'Idag har du fått ${userProvider.user?.moneyToGetThisWeek} kr i veckopeng!';
   }
+
+  String get currentFakeDay => getDayOfTheWeek(_currentTimeFake);
+
+  //används bara i testsyfte
+  int day = 1;
+  late DateTime _currentTimeFake = DateTime.utc(2024, 7, day);
+
+  //fake methods for easier day handling
+  void _startTimerFake() {
+    dispose();
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      updateTimeFakeDays();
+    });
+  }
+
+  void updateTimeFakeDays() {
+    if (getDayOfTheWeek(_currentTimeFake) == "Fredag") {
+      userProvider.incrementMoneyForAllUsers();
+    }
+    if (day == 8) {
+      day = 1;
+    }
+    day++;
+    _currentTimeFake = DateTime.utc(2024, 7, day);
+    notifyListeners();
+  }
+
+  int _daysUntilSaturdayFake() {
+    int saturday = DateTime.saturday;
+    int daysUntilSaturday = saturday - day;
+    return daysUntilSaturday;
+  }
 }
 
 String getDayOfTheWeek(DateTime dateTime) {
@@ -93,6 +104,6 @@ String dayToUpperString(String day) {
 
 int _daysUntilSaturday() {
   int saturday = DateTime.saturday;
-  int daysUntilSaturday = saturday - DateTime.now().day;
+  int daysUntilSaturday = saturday - DateTime.now().weekday;
   return daysUntilSaturday;
 }

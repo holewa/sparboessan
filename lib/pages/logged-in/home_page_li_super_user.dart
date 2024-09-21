@@ -9,9 +9,6 @@ class HomePageLoggedInSuperUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Superuser Screen'),
-      ),
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
@@ -25,7 +22,6 @@ class HomePageLoggedInSuperUser extends StatelessWidget {
             if (result != null) {
               final username = result['username'];
               final amount = result['amount'];
-              
               try {
                 final userProvider = context.read<UserProvider>();
                 userProvider.updateUserMoney(username, amount);
