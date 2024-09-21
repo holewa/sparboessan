@@ -7,6 +7,8 @@ class UserProvider extends ChangeNotifier {
   final Map<String, User> _users = {};
   User? _user;
 
+  String _selectedUser = '';
+
   final List<String> users = ['Ruben', 'Otto', 'Admin'];
 
   final List<String> _superUsers = ['Admin'];
@@ -24,6 +26,8 @@ class UserProvider extends ChangeNotifier {
   bool get isSuperUser =>
       _user != null && _superUsers.contains(_user!.username);
 
+  String get selectedUser => _selectedUser;
+
   Map<String, bool>? get featureToggles => user?.featureToggles;
 
   UserProvider(this._moneyService) {
@@ -37,7 +41,6 @@ class UserProvider extends ChangeNotifier {
 
   Future<bool> logIn(String username) async {
     if (users.contains(username)) {
-      // await loadFeatureToggles();
       if (!_users.containsKey(username)) {
         final user = User(username: username);
         _users[username] = user;
@@ -106,4 +109,10 @@ class UserProvider extends ChangeNotifier {
     featureToggles![featureKey] = !(featureToggles![featureKey] ?? false);
     notifyListeners();
   }
+
+  void setSelectedUser(String user) {
+    _selectedUser = user;
+    notifyListeners();
+  }
+
 }
