@@ -43,7 +43,7 @@ class HomePageLoggedInUser extends StatelessWidget {
                 height: 60,
               ),
               Text(
-                '${context.watch<UserProvider>().currentMoney} kr',
+                '${context.watch<UserProvider>().user?.currentMoney} kr',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const UseMoneyDialog(),

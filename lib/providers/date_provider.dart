@@ -26,7 +26,6 @@ class DateProvider extends ChangeNotifier {
       : _daysUntilSaturdayText(_daysUntilSaturday());
 
   void _startTimer() {
-    dispose();
     _timer = Timer.periodic(const Duration(hours: 23), (timer) {
       updateTime();
     });
@@ -68,7 +67,6 @@ class DateProvider extends ChangeNotifier {
 
   //fake methods for easier day handling
   void _startTimerFake() {
-    dispose();
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       updateTimeFakeDays();
     });

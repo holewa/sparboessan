@@ -1,35 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:pengastigen/models/user.dart';
-import 'package:pengastigen/providers/date_provider.dart';
 import 'package:pengastigen/providers/money_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
   final Map<String, User> _users = {};
   User? _user;
-
   String _selectedUser = '';
-
-  final List<String> users = ['Ruben', 'Otto', 'Admin'];
-
+  final List<String> usersNames = ['Ruben', 'Otto', 'Admin'];
   final List<String> _superUsers = ['Admin'];
-
   final MoneyService _moneyService;
 
+  //etters
   User? get user => _user;
-
-  String get username => _user?.username ?? '';
-
   bool get isLoggedIn => _user != null;
-
-  int get currentMoney => _user?.currentMoney ?? 0;
-
   bool get isSuperUser =>
       _user != null && _superUsers.contains(_user!.username);
-
   String get selectedUser => _selectedUser;
-
   Map<String, bool>? get featureToggles => user?.featureToggles;
+  Map<String, User>? get users => _users;
+
+  // String get username => _user?.username ?? '';
+  // int get currentMoney => _user?.currentMoney ?? 0;
+  // String? get avatar => user?.avatar;
+
 
   UserProvider(this._moneyService) {
     _loadUsers();
@@ -41,7 +35,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<bool> logIn(String username) async {
-    if (users.contains(username)) {
+    if (usersNames.contains(username)) {
       if (!_users.containsKey(username)) {
         final user = User(username: username);
         _users[username] = user;
@@ -113,6 +107,11 @@ class UserProvider extends ChangeNotifier {
 
   void setSelectedUser(String user) {
     _selectedUser = user;
+    notifyListeners();
+  }
+
+  void setAvatar(String avatar) {
+    user?.avatar = avatar;
     notifyListeners();
   }
 

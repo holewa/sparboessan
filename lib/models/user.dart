@@ -7,28 +7,29 @@ class User {
   int moneyToGetThisWeek;
   final int maxLevel;
   Map<String, bool> featureToggles;
+  String avatar;
 
-  User({
-    required this.username,
-    this.currentMoney = 0,
-    this.currentLevel = 1,
-    this.maxLevel = 3,
-    this.moneyToGetThisWeek = 10,
-    this.featureToggles = const {},
-  });
+  User(
+      {required this.username,
+      this.currentMoney = 0,
+      this.currentLevel = 1,
+      this.maxLevel = 3,
+      this.moneyToGetThisWeek = 10,
+      this.featureToggles = const {},
+      this.avatar = 'standard'});
 
   // Create a User instance from a Map (used in fromJson)
   factory User.fromMap(Map<String, dynamic> data) {
     return User(
-      username: data['username'],
-      currentMoney: data['currentMoney'],
-      currentLevel: data['currentLevel'],
-      maxLevel: data['maxLevel'],
-      moneyToGetThisWeek: data['moneyToGetThisWeek'],
+      username: data['username'] ?? '',
+      currentMoney: data['currentMoney'] ?? 0,
+      currentLevel: data['currentLevel'] ?? 1,
+      maxLevel: data['maxLevel'] ?? 3,
+      moneyToGetThisWeek: data['moneyToGetThisWeek'] ?? 10,
       featureToggles: Map<String, bool>.from(data['featureToggles'] ?? {}),
+      avatar: data['avatar'] ?? 'standard',
     );
   }
-
   // Convert a User instance to a Map (used in toJson)
   Map<String, dynamic> toMap() {
     return {
@@ -38,6 +39,7 @@ class User {
       'maxLevel': maxLevel,
       'moneyToGetThisWeek': moneyToGetThisWeek,
       'featureToggles': featureToggles,
+      'avatar': avatar,
     };
   }
 

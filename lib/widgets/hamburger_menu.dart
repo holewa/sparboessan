@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:pengastigen/constans/app_colors.dart';
 import 'package:pengastigen/constans/feature_toggles.dart';
+import 'package:pengastigen/pages/AvatarSelectionPage.dart';
 import 'package:pengastigen/providers/user_provider.dart';
 import 'package:pengastigen/widgets/feature_toggle_button.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +14,6 @@ class HamburgerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
-    // final featureToggleProvider = context.watch<FeatureToggleProvider>();
 
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
@@ -31,10 +33,7 @@ class HamburgerMenu extends StatelessWidget {
             title: const Text('Testmiljö'),
             leading: const FeatureToggleButton(
                 featureKey: FeatureToggles.testEnviroment),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
+            onTap: () {},
           ),
           ListTile(
             leading:
@@ -42,10 +41,21 @@ class HamburgerMenu extends StatelessWidget {
             title: const Text('Dark mode'),
             onTap: () {
               userProvider.setFeatureToggle(FeatureToggles.darkMode);
-
-              // Update the state of the app.
-              // ...
             },
+          ),
+          ListTile(
+            leading: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AvatarSelectionPage(),
+                  ),
+                );
+              },
+              child: const Text('Byt profilbild'),
+            ),
           ),
         ],
       ),
