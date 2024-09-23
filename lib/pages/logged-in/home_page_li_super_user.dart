@@ -26,7 +26,7 @@ class HomePageLoggedInSuperUser extends StatelessWidget {
                 final userProvider = context.read<UserProvider>();
                 userProvider.updateUserMoney(username, amount);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Money updated for $username')),
+                  SnackBar(content: Text('Pengar har gått iväg till $username')),
                 );
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(

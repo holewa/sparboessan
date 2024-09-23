@@ -63,11 +63,10 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  avatarName,
-                  style: const TextStyle(fontSize: 14),
-                ),
+                // Text(
+                //   avatarName,
+                //   style: const TextStyle(fontSize: 14),
+                // ),
               ],
             ),
           );
