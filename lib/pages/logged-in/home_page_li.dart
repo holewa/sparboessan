@@ -9,10 +9,11 @@ class HomePageLoggedIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSuperUser = context.watch<UserProvider>().isSuperUser;
+    // bool isSuperUser = context.watch<UserProvider>().isSuperUser;
 
-    return isSuperUser
-        ? const HomePageLoggedInSuperUser()
-        : const HomePageLoggedInUser();
+    // return isSuperUser
+    //     ? const HomePageLoggedInSuperUser()
+    //     : const HomePageLoggedInUser();
+    return const HomePageLoggedInUser();
   }
 }

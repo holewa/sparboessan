@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class User {
+  int id;
   String username;
   int currentMoney;
   int currentLevel;
@@ -9,8 +10,8 @@ class User {
   Map<String, bool> featureToggles;
   String avatar;
 
-  User(
-      {required this.username,
+  User({required this.id,
+      required this.username,
       this.currentMoney = 0,
       this.currentLevel = 1,
       this.maxLevel = 3,
@@ -19,20 +20,22 @@ class User {
       this.avatar = 'standard'});
 
   // Create a User instance from a Map (used in fromJson)
-  factory User.fromMap(Map<String, dynamic> data) {
+  factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      username: data['username'] ?? '',
-      currentMoney: data['currentMoney'] ?? 0,
-      currentLevel: data['currentLevel'] ?? 1,
-      maxLevel: data['maxLevel'] ?? 3,
-      moneyToGetThisWeek: data['moneyToGetThisWeek'] ?? 10,
-      featureToggles: Map<String, bool>.from(data['featureToggles'] ?? {}),
-      avatar: data['avatar'] ?? 'standard',
+      id: json['id'] as int,
+      username: json['username'] ?? '',
+      currentMoney: json['currentMoney'] ?? 0,
+      currentLevel: json['currentLevel'] ?? 1,
+      maxLevel: json['maxLevel'] ?? 3,
+      moneyToGetThisWeek: json['moneyToGetThisWeek'] ?? 10,
+      featureToggles: Map<String, bool>.from(json['featureToggles'] ?? {}),
+      avatar: json['avatar'] ?? 'standard',
     );
   }
   // Convert a User instance to a Map (used in toJson)
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'username': username,
       'currentMoney': currentMoney,
       'currentLevel': currentLevel,
@@ -47,7 +50,7 @@ class User {
   String toJson() => jsonEncode(toMap());
 
   // For loading from SharedPreferences
-  factory User.fromJson(String json) => User.fromMap(jsonDecode(json));
+  // factory User.fromJson(String json) => User.fromMap(jsonDecode(json));
 
   void incrementMoney() {
     const int maxLevel = 3;

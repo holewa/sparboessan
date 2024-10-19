@@ -1,21 +1,45 @@
+// ignore_for_file: prefer_single_quotes
+
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pengastigen/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:http/http.dart' as http;
 
 class AvatarSelectionPage extends StatefulWidget {
+  const AvatarSelectionPage({super.key});
+
   @override
   _AvatarSelectionPageState createState() => _AvatarSelectionPageState();
 }
 
 class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
   String? selectedAvatarName;
+  List<String> userNames = [];
 
-  final List<String> userNames = [
-    'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi',
-    'jakob'
-    // Add more names or unique identifiers
+  final List<String> userNamesOld = [
+    'hej', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi',
+    'jakob', 'niklas', 'oscar', 'josef', 'william', 'hwhd', 'hdhsd', 'Ruben',
+    'Joel', 'mamma', 'pappa,' 'otto', 'parpa'
+    // TODO: paginate
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    userNames = List.generate(20, (_) => generateRandomString(10));
+  }
+
+  String generateRandomString(int length) {
+    const chars =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    Random random = Random();
+    return String.fromCharCodes(Iterable.generate(
+        length, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +52,7 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
       body: GridView.builder(
         padding: const EdgeInsets.all(16.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 5,
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
         ),
@@ -39,10 +63,8 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
 
           return GestureDetector(
             onTap: () {
-              setState(() {
-                selectedAvatarName = avatarName;
-                userProvider.setAvatar(userNames[index]);
-              });
+              selectedAvatarName = avatarName;
+              userProvider.setAvatar(userNames[index]);
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -73,9 +95,17 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (selectedAvatarName != null) {
             Navigator.pop(context, selectedAvatarName);
+            var url = Uri.parse(
+                'http://localhost:8080/users/${userProvider.user?.id.toString()}');
+            var response = await http.put(
+              url,
+              body: jsonEncode({'avatar': selectedAvatarName}),
+              headers: {"Content-Type": "application/json"},
+            );
+            print(response.statusCode);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Välj en profilbild')),

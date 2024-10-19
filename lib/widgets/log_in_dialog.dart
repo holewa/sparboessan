@@ -23,6 +23,8 @@ class LogInDialog extends StatelessWidget {
           : const Icon(Icons.lock_person),
       iconAlignment: IconAlignment.end,
       onPressed: () async {
+        userProvider.loadUsers();
+
         final String? username = await showDialog<String>(
           context: context,
           builder: (BuildContext context) {
@@ -31,7 +33,7 @@ class LogInDialog extends StatelessWidget {
         );
 
         if (username != null && username.isNotEmpty) {
-          bool success = await userProvider.logIn(username);
+          bool success = await userProvider.logIn(username, 0);
           if (success) {
             final userProvider = context.read<UserProvider>();
             final username =
@@ -76,6 +78,7 @@ class __LogInDialogContentState extends State<_LogInDialogContent> {
   }
 
   void _onTextChanged() {
+    print('hej');
     setState(() {
       _isButtonEnabled = _usernameController.text.trim().isNotEmpty;
     });
@@ -169,7 +172,7 @@ class __LogInDialogContentState extends State<_LogInDialogContent> {
                   // final username = _usernameController.text.trim();
                   final username = userProvider.selectedUser;
                   bool success =
-                      await context.read<UserProvider>().logIn(username);
+                      await context.read<UserProvider>().logIn(username, 0);
                   if (success) {
                     Navigator.pop(context,
                         username); // Only close the dialog if login is successful

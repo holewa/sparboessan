@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengastigen/constans/app_colors.dart';
 import 'package:pengastigen/constans/feature_toggles.dart';
-import 'package:pengastigen/pages/AvatarSelectionPage.dart';
+import 'package:pengastigen/pages/avatar_selection_page.dart';
 import 'package:pengastigen/widgets/feature_toggle_button.dart';
 
 class HamburgerMenu extends StatelessWidget {
