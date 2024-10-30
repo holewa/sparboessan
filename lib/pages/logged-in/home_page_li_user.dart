@@ -13,7 +13,7 @@ class HomePageLoggedInUser extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
     final bool isTestEnvironment =
-        userProvider.isFeatureToggled(FeatureToggles.testEnviroment);
+        userProvider.isFeatureToggled(FeatureToggles.testEnvironment);
 
     return Scaffold(
       body: Stack(
@@ -30,15 +30,6 @@ class HomePageLoggedInUser extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 417, top: 10),
-                child: Text(
-                  context.watch<DateProvider>().currentDay,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
               const SizedBox(
                 height: 60,
               ),

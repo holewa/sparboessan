@@ -19,9 +19,11 @@ class CustomMultiProvider extends StatelessWidget {
         Provider<MoneyService>(
           create: (_) => MoneyService(),
         ),
+
         Provider<UserService>(
           create: (_) => UserService(),
         ),
+
         // Now provide UserProvider with the services above
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(

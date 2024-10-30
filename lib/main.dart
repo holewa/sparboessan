@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Colors.purple,
                 brightness:
-                    userProvider.isFeatureToggled(FeatureToggles.darkMode) || userProvider.isFeatureToggled(FeatureToggles.testEnviroment) ? Brightness.dark : Brightness.light,),
+                    userProvider.isFeatureToggled(FeatureToggles.darkMode) || userProvider.isFeatureToggled(FeatureToggles.testEnvironment) ? Brightness.dark : Brightness.light,),
               appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.purple,
               ),

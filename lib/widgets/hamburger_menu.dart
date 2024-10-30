@@ -23,16 +23,6 @@ class HamburgerMenu extends StatelessWidget {
             ),
             child: Text('Inställningar'),
           ),
-          const ListTile(
-            title: Text('Testmiljö'),
-            leading: FeatureToggleButton(
-                featureKey: FeatureToggles.testEnviroment),
-          ),
-          const ListTile(
-            leading:
-                FeatureToggleButton(featureKey: FeatureToggles.darkMode),
-            title: Text('Dark mode'),
-          ),
           ListTile(
             leading: ElevatedButton(
               onPressed: () {
@@ -40,12 +30,17 @@ class HamburgerMenu extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AvatarSelectionPage(),
+                    builder: (context) => const AvatarSelectionPage(),
                   ),
                 );
               },
               child: const Text('Byt profilbild'),
             ),
+          ),
+          const ListTile(
+            leading:
+                FeatureToggleButton(featureKey: FeatureToggles.darkMode),
+            title: Text('Dark mode'),
           ),
         ],
       ),

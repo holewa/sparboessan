@@ -53,6 +53,11 @@ class UserProvider extends ChangeNotifier {
     await prefs.setString(user.username, user.toJson());
   }
 
+  // Future<void> _updateUser(userId) async {
+  //   return null;
+  // }
+
+
   Future<bool> logIn(String username, int id) async {
     if (!_users.containsKey(username)) {
       final user = User(username: username, id: id);
@@ -74,12 +79,13 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> useMoney() async {
-    if (_user != null) {
-      _moneyService.useMoney(_user!);
-      await _saveUser(_user!);
-      notifyListeners();
-    }
+  Future<void> useMoney(int money) async {
+    print(money);
+    // if (_user != null) {
+    //   _moneyService.useMoney(_user!);
+    //   await _saveUser(_user!);
+    //   notifyListeners();
+    // }
   }
 
   void updateUserMoney(String username, int amount) {
@@ -129,7 +135,25 @@ class UserProvider extends ChangeNotifier {
     return false;
   }
 
-  void setFeatureToggle(String featureKey) {
+  void setFeatureToggle(String featureKey) async {
+    var response = await _userService.fetchUsers();
+
+    if (response.statusCode == 200) {
+      List<User> fetchedUsers = parsedUsers(response.body);
+      for (var fetchedUser in fetchedUsers) {
+        if (_users.containsKey(fetchedUser.username)) {
+          // Update the existing user's balance
+          User existingUser = _users[fetchedUser.username]!;
+          existingUser.currentMoney =
+              fetchedUser.currentMoney; // Update balance
+          // Update other fields if necessary
+        } else {
+          // Add new user if not already present
+          _users[fetchedUser.username] = fetchedUser;
+        }
+      }
+      notifyListeners(); // Notify listeners after all updates
+    }
     featureToggles![featureKey] = !(featureToggles![featureKey] ?? false);
     notifyListeners();
   }

@@ -12,7 +12,6 @@ class FeatureToggleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
-    final dateprovider = context.watch<DateProvider>();
 
     return Switch(
       activeColor: Colors.amber,
@@ -23,9 +22,6 @@ class FeatureToggleButton extends StatelessWidget {
       value: userProvider.isFeatureToggled(featureKey),
       onChanged: (value) => {
         userProvider.setFeatureToggle(featureKey),
-        if(featureKey == FeatureToggles.testEnviroment) {
-          dateprovider.toggleEnvironment()
-      }
       },
     );
   }

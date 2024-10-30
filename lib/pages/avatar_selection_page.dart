@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_single_quotes
-
 import 'dart:convert';
 import 'dart:math';
 
@@ -19,30 +17,71 @@ class AvatarSelectionPage extends StatefulWidget {
 }
 
 class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
-  String? selectedAvatarName;
+  String? selectedAvatar;
   List<String> userNames = [];
   late UserService userService;
   String localHost = EndpointConstants.LOCALHOST;
 
-  final List<String> userNamesOld = [
-    'hej', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi',
-    'jakob', 'niklas', 'oscar', 'josef', 'william', 'hwhd', 'hdhsd', 'Ruben',
-    'Joel', 'mamma', 'pappa,' 'otto', 'parpa'
-    // TODO: paginate
-  ];
+  int currentPage = 0;
+  final int itemsPerPage = 20;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    userNames = List.generate(20, (_) => generateRandomString(10));
+    loadAvatars();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userService = Provider.of<UserService>(context);
+  }
+
+  Future<void> loadAvatars() async {
+    if (isLoading) return; // Prevent multiple loads
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
+    // Simulate an API call with a delay
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Fetch avatars based on current page
+    List<String> newAvatars = await fetchAvatars(currentPage, itemsPerPage);
+    
+    setState(() {
+      userNames = newAvatars; // Replace current avatars with new ones
+      isLoading = false; // Stop loading
+    });
+  }
+
+  Future<List<String>> fetchAvatars(int page, int itemsPerPage) async {
+    // Simulate fetching avatars (for demo purposes)
+    return List.generate(itemsPerPage, (_) => generateRandomString(10));
   }
 
   String generateRandomString(int length) {
-    const chars =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     Random random = Random();
     return String.fromCharCodes(Iterable.generate(
         length, (_) => chars.codeUnitAt(random.nextInt(chars.length))));
+  }
+
+  void nextPage() {
+    setState(() {
+      currentPage++;
+    });
+    loadAvatars();
+  }
+
+  void previousPage() {
+    if (currentPage > 0) {
+      setState(() {
+        currentPage--;
+      });
+      loadAvatars();
+    }
   }
 
   @override
@@ -53,62 +92,70 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
       appBar: AppBar(
         title: const Text('Välj en profilbild'),
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
-        ),
-        itemCount: userNames.length,
-        itemBuilder: (context, index) {
-          final avatarName = userNames[index];
-          final isSelected = selectedAvatarName == avatarName;
+      body: Column(
+        children: [
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+              ),
+              itemCount: userNames.length,
+              itemBuilder: (context, index) {
+                final avatarName = userNames[index];
+                final isSelected = selectedAvatar == avatarName;
 
-          return GestureDetector(
-            onTap: () {
-              selectedAvatarName = avatarName;
-              userProvider.setAvatar(userNames[index]);
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  radius: 40, // Adjust size as needed
-                  backgroundColor:
-                      isSelected ? Colors.blue : Colors.transparent,
-                  foregroundColor:
-                      Colors.transparent, // Highlight selected avatar
-                  child: ClipOval(
-                    child: RandomAvatar(
-                      userNames[index],
-                      // user, // Replace with actual user or unique string to generate avatars
-                      height: 80, // Adjust avatar height
-                      width: 80, // Adjust avatar width
-                      trBackground: true,
-                    ),
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedAvatar = avatarName;
+                      userProvider.setAvatar(userNames[index]);
+                    });
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: isSelected ? Colors.blue : Colors.transparent,
+                        child: ClipOval(
+                          child: RandomAvatar(
+                            userNames[index],
+                            height: 80,
+                            width: 80,
+                            trBackground: true,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                // Text(
-                //   avatarName,
-                //   style: const TextStyle(fontSize: 14),
-                // ),
-              ],
+                );
+              },
             ),
-          );
-        },
+          ),
+          if (isLoading) const CircularProgressIndicator(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: previousPage,
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward),
+                onPressed: nextPage,
+              ),
+            ],
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (selectedAvatarName != null) {
-            Navigator.pop(context, selectedAvatarName);
-            var url = Uri.parse(
-                '${userService.localHost}/users/${userProvider.user?.id.toString()}');
-            await http.put(
-              url,
-              body: jsonEncode({'avatar': selectedAvatarName}),
-              headers: {"Content-Type": "application/json"},
-            );
+          if (selectedAvatar != null) {
+            Navigator.pop(context, selectedAvatar);
+            userService.changeAvatar(userProvider.user?.id.toString(), selectedAvatar!);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Välj en profilbild')),
