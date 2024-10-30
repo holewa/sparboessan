@@ -51,4 +51,5 @@ class HamburgerMenu extends StatelessWidget {
       ),
     );
   }
+
 }

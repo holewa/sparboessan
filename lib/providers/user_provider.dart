@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class UserProvider extends ChangeNotifier {
   String _selectedUser = '';
   final MoneyService _moneyService;
   final UserService _userService;
+  Timer? _timer;
 
   //getters
   User? get user => _user;
@@ -21,13 +23,30 @@ class UserProvider extends ChangeNotifier {
   Map<String, bool>? get featureToggles => user?.featureToggles;
   Map<String, User>? get users => _users;
 
-  String apiUrl = 'http://localhost:8080';
-
   // String get username => _user?.username ?? '';
   // int get currentMoney => _user?.currentMoney ?? 0;
   // String? get avatar => user?.avatar;
 
-  UserProvider(this._moneyService, this._userService);
+  UserProvider(this._moneyService, this._userService) {
+    startFetchingUsers(); // Start fetching users on initialization
+  }
+
+  // Fetching logic
+  void startFetchingUsers() {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+      await loadUsers(); // Call loadUsers periodically
+    });
+  }
+
+  void stopFetchingUsers() {
+    _timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    stopFetchingUsers(); // Stop the timer when disposing
+    super.dispose();
+  }
 
   Future<void> _saveUser(User user) async {
     final prefs = await SharedPreferences.getInstance();
@@ -86,12 +105,21 @@ class UserProvider extends ChangeNotifier {
     var response = await _userService.fetchUsers();
 
     if (response.statusCode == 200) {
-      List<User> users = parsedUsers(response.body);
-      for (var val in users) {
-        _users[val.username] = val;
+      List<User> fetchedUsers = parsedUsers(response.body);
+      for (var fetchedUser in fetchedUsers) {
+        if (_users.containsKey(fetchedUser.username)) {
+          // Update the existing user's balance
+          User existingUser = _users[fetchedUser.username]!;
+          existingUser.currentMoney =
+              fetchedUser.currentMoney; // Update balance
+          // Update other fields if necessary
+        } else {
+          // Add new user if not already present
+          _users[fetchedUser.username] = fetchedUser;
+        }
       }
+      notifyListeners(); // Notify listeners after all updates
     }
-    notifyListeners();
   }
 
   bool isFeatureToggled(String featureKey) {

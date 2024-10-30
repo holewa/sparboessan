@@ -78,7 +78,6 @@ class __LogInDialogContentState extends State<_LogInDialogContent> {
   }
 
   void _onTextChanged() {
-    print('hej');
     setState(() {
       _isButtonEnabled = _usernameController.text.trim().isNotEmpty;
     });

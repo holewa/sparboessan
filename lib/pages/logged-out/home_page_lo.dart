@@ -12,16 +12,6 @@ class HomePageLoggedOut extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-        Padding(
-          padding:
-              const EdgeInsets.only(right: 417, top: 10),
-          child: Text(
-            context.watch<DateProvider>().currentDay,
-            style: const TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
           const SizedBox(
             height: 60,
           ),

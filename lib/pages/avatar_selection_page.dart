@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pengastigen/constans/endpoint_constants.dart';
 import 'package:pengastigen/providers/user_provider.dart';
+import 'package:pengastigen/service/user_service.dart';
 import 'package:provider/provider.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +21,8 @@ class AvatarSelectionPage extends StatefulWidget {
 class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
   String? selectedAvatarName;
   List<String> userNames = [];
+  late UserService userService;
+  String localHost = EndpointConstants.LOCALHOST;
 
   final List<String> userNamesOld = [
     'hej', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi',
@@ -99,13 +103,12 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
           if (selectedAvatarName != null) {
             Navigator.pop(context, selectedAvatarName);
             var url = Uri.parse(
-                'http://localhost:8080/users/${userProvider.user?.id.toString()}');
-            var response = await http.put(
+                '${userService.localHost}/users/${userProvider.user?.id.toString()}');
+            await http.put(
               url,
               body: jsonEncode({'avatar': selectedAvatarName}),
               headers: {"Content-Type": "application/json"},
             );
-            print(response.statusCode);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Välj en profilbild')),
